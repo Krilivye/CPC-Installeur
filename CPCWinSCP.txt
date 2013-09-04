@@ -1,0 +1,22 @@
+# Automatically abort script on errors
+option batch abort
+# Disable overwrite confirmations that conflict with the previous
+option confirm off
+# Connect
+open ftp://addons:coin@188.165.212.111/Arma3
+
+# Synchronize
+synchronize local -delete -mirror @ACRE @ACRE
+synchronize local -delete -mirror @CBA_A3 @CBA_A3
+synchronize local -delete -mirror @cpc_core @cpc_core
+synchronize local -delete -mirror @cpc_util @cpc_util
+synchronize local -delete -mirror @cpc_iles @cpc_iles
+synchronize local -delete -mirror @JayArma2Lib @JayArma2Lib
+synchronize local -delete -mirror userconfig userconfig
+synchronize local -delete -mirror @AllInArma @AllInArma
+
+
+# Disconnect
+close
+# Exit WinSCP
+exit
