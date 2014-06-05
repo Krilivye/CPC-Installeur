@@ -135,6 +135,24 @@ Section
 	File /oname=CPCInstall\WinSCP.exe WinSCP.exe
 	File /oname=CPCInstall\cpc_aia.bat cpc_aia.bat
 
+
+    IfFileExists $INSTDIR\CPCInstall\CPC-Launcher.exe updateLauncher installLauncher
+    
+    installLauncher:
+        File /oname=CPCInstall\CPC-Launcher.exe CPC-Launcher.exe
+        File /oname=CPCInstall\CPC-Launcher.exe.config CPC-Launcher.exe.config
+        CreateDirectory $INSTDIR\CPCInstall\LauncherFiles
+        File /oname=CPCInstall\LauncherFiles\allinarma LauncherFiles\allinarma
+        File /oname=CPCInstall\LauncherFiles\cpcarma3 LauncherFiles\cpcarma3
+        File /oname=CPCInstall\LauncherFiles\cpcmcc LauncherFiles\cpcmcc
+        File /oname=CPCInstall\LauncherFiles\cpcts LauncherFiles\cpcts
+        File /oname=CPCInstall\LauncherFiles\cpcupdate LauncherFiles\cpcupdate
+        Goto updateLauncher
+        
+    updateLauncher:
+
+ 
+
 	
 SectionEnd
 
@@ -195,17 +213,15 @@ Section "CPC"
 		NSExec::ExecToLog "$INSTDIR\CPCInstall\WinSCP.com /script=CPCInstall\CPCWinSCP.txt"
 		Delete "$INSTDIR\CPCInstall\WinSCP.com"
 		Delete "$INSTDIR\CPCInstall\WinSCP.exe"
-		CreateShortCut "$DESKTOP\CPC-AIA.lnk" "$INSTDIR\CPCInstall\cpc_aia.bat"
-		ShellLink::SetRunAsAdministrator $DESKTOP\CPC-AIA.lnk
+
 		
-		# racourci pour arma3 avec les bon paramètres
-		CreateShortCut "$DESKTOP\CPC-Arma3.lnk" "$INSTDIR\arma3.exe"" -skipintro -noPause -nosplash -world=empty -mod=@CBA_A3;@JayArma2Lib;@ACRE;@cpc_core;@cpc_util;@cpc_iles"
+		# racourci pour CPC Launcher avec les bon paramètres
+		CreateShortCut "$DESKTOP\CPC-Arma3.lnk" "$INSTDIR\CPCInstall\CPC-Launcher.exe"
 		ShellLink::SetRunAsAdministrator $DESKTOP\CPC-Arma3.lnk
 		WriteRegStr HKLM "Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\layers" \
 		"$INSTDIR\arma3.exe" "RUNASADMIN"
 			
 		CopyFiles "$EXEDIR\cpc-arma3.exe" "$INSTDIR\CPCInstall\cpc-arma3.exe"
-		CreateShortCut "$DESKTOP\CPC-Update.lnk" "$INSTDIR\CPCInstall\cpc-arma3.exe"
 		
 		DetailPrint "Fin de la mise à jour"
 SectionEnd
@@ -224,8 +240,6 @@ Section "Config TS3"
 		DetailPrint "Installation du plugin ACRE sur TeamSpeak 3"
 		CopyFiles '$INSTDIR\@ACRE\plugin\acre_win$R9.dll' '$R5'
 		# racourci pour ts3
-		CreateShortCut "$DESKTOP\CPC-TS3.lnk" "$R4\ts3client_win$R9.exe"" ts3server://188.165.212.111:9987?password=coin666"
-		ShellLink::SetRunAsAdministrator $DESKTOP\CPC-TS3.lnk
 		WriteRegStr HKLM "Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\layers" \
 		"$R4\ts3client_win$R9.exe" "RUNASADMIN"
 	noACRE:
